@@ -17,9 +17,9 @@ USE
 The GUI creates a 'Objects.dat' file, which contains the programs that are to be started.
 The following format is used:
 
-<NAME><PATH TO A DRIVE><DELAY IN SECONDS>;
+\<NAME\>\<PATH TO A DRIVE\>\<DELAY IN SECONDS\>;
 
 e.g.
-<Notepad++><D:\Program Files (x86)\Notepad++\notepad++.exe><45>;
+\<Notepad++\>\<D:\Program Files (x86)\Notepad++\notepad++.exe\>\<45\>;
 
 The path must not contain quotes!

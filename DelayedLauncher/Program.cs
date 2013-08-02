@@ -35,7 +35,9 @@ namespace DelayedLauncher
     {
         static void Main(string[] args)
         {
-            using(StreamReader sr = new StreamReader("objects.dat"))
+            string objectsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StartupDelayer\\objects.dat";
+
+            using(StreamReader sr = new StreamReader(objectsPath))
             {
                 List<string[]> programs = new List<string[]>(10);
 

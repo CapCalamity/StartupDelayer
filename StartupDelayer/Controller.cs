@@ -33,6 +33,11 @@ namespace StartupDelayer
             Application.Run(this.MainForm);
         }
 
+        /// <summary>
+        /// Add a Program, by creating the matching dialog for it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         internal void AddProgram(object sender, EventArgs e)
         {
             FormAddProgram fad = new FormAddProgram(this);
@@ -46,11 +51,18 @@ namespace StartupDelayer
             }
         }
 
+        /// <summary>
+        /// Adds a DelayedProgram to the DatagridView
+        /// </summary>
+        /// <param name="newProg">The DelayedProgram to be added</param>
         private void AddRow(DelayedProgram newProg)
         {
             this.MainForm.AddRow(newProg);
         }
 
+        /// <summary>
+        /// Recreates the Datagridview rows
+        /// </summary>
         private void RefreshRows()
         {
             this.MainForm.DeleteRows();
@@ -60,11 +72,16 @@ namespace StartupDelayer
             }
         }
 
+        /// <summary>
+        /// Loads all Objects from ./objects.dat
+        /// </summary>
         public void LoadObjects()
         {
-            if(File.Exists("objects.dat"))
+            string fPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StartupDelayer\\objects.dat";
+
+            if(File.Exists(fPath))
             {
-                using(StreamReader sr = new StreamReader("objects.dat", Encoding.ASCII))
+                using(StreamReader sr = new StreamReader(fPath, Encoding.ASCII))
                 {
                     //initial read...
                     string line = sr.ReadLine();
@@ -81,11 +98,17 @@ namespace StartupDelayer
             }
         }
 
+        /// <summary>
+        /// Creates the ./objects.dat
+        /// Truncates if exists, Creates if not
+        /// </summary>
         public void WriteStartupFile()
         {
             string[] lines = new string[this.DelayedPrograms.Count];
             int bufferSize = 0;
             byte[] buffer;
+            string objectsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StartupDelayer\\objects.dat";
+            string dirPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\StartupDelayer";
 
             List<byte[]> tmpBuffers = new List<byte[]>();
 
@@ -109,16 +132,26 @@ namespace StartupDelayer
                 pos += b.Length;
             }
 
-            if(!File.Exists("objects.dat"))
-                File.Create("objects.dat").Close();
+            if(!Directory.Exists(dirPath))
+                Directory.CreateDirectory(dirPath);
 
-            using(FileStream fstream = new FileStream("objects.dat", FileMode.Truncate, FileAccess.Write))
+            if(File.Exists(objectsPath))
+                File.Delete(objectsPath);
+
+            using(FileStream fstream = File.Open(objectsPath, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
             {
                 fstream.Write(buffer, 0, bufferSize);
                 fstream.Flush();
             }
+
+            //@TODO: Add a notification for the user, a messagewindow or something...
         }
 
+        /// <summary>
+        /// Call the dialog to edit a DelayedProgram
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         internal void Edit(object sender, DataGridViewCellEventArgs e)
         {
             using(FormEditProgram fe = new FormEditProgram(this.DelayedPrograms[e.RowIndex]))
@@ -131,6 +164,18 @@ namespace StartupDelayer
                     this.RefreshRows();
                 }
             }
+        }
+
+        /// <summary>
+        /// Delete the selected row
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="row">Row index to be deleted. 0 based</param>
+        internal void DeleteRow(object sender, EventArgs e, int row)
+        {
+            this.DelayedPrograms.RemoveAt(row);
+            this.RefreshRows();
         }
     }
 }

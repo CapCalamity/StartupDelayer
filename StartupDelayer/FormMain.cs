@@ -13,6 +13,7 @@ namespace StartupDelayer
     public partial class FormMain : Form
     {
         private Controller Controller { get; set; }
+        private int SelectedRow { get; set; }
 
         internal FormMain(Controller controller)
         {
@@ -43,6 +44,16 @@ namespace StartupDelayer
         private void ProgramList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             this.Controller.Edit(sender, e);
+        }
+
+        private void ItemDelete_Click(object sender, EventArgs e)
+        {
+            this.Controller.DeleteRow(sender, e, this.SelectedRow);
+        }
+
+        private void ProgramList_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            this.SelectedRow = e.RowIndex;
         }
     }
 }

@@ -65,6 +65,7 @@
             this.ProgramList.ShowEditingIcon = false;
             this.ProgramList.Size = new System.Drawing.Size(460, 359);
             this.ProgramList.TabIndex = 0;
+            this.ProgramList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProgramList_CellDoubleClick);
             this.ProgramList.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ProgramList_CellMouseUp);
             // 
             // ColName
